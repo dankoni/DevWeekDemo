@@ -10,21 +10,9 @@ import android.content.Context;
 @TypeConverters({IncorrectSetConverter.class})
 public abstract class QuizDatabase extends RoomDatabase {
 
+    public static final String database_name = "quiz_database";
+
     public abstract QuizDao getQuizDao();
+
     public abstract QuestionDao getQuestionDao();
-
-    private static volatile QuizDatabase INSTANCE;
-
-    public static QuizDatabase getDatabase(final Context context) {
-        if (INSTANCE == null) {
-            synchronized (QuizDatabase.class) {
-                if (INSTANCE == null) {
-                    INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
-                            QuizDatabase.class, "quiz_database")
-                            .build();
-                }
-            }
-        }
-        return INSTANCE;
-    }
 }
