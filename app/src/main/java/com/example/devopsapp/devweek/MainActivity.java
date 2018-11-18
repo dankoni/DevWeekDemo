@@ -1,12 +1,7 @@
 package com.example.devopsapp.devweek;
 
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.widget.FrameLayout;
-
-import com.example.devopsapp.devweek.quizentry.QuizEntry;
 
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;

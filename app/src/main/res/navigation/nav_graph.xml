@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/quizEntry"
-        android:name="com.example.devopsapp.devweek.quizentry.QuizEntry"
+        android:name="com.example.devopsapp.devweek.quiz_ui.QuizEntry"
         android:label="QuizEntry">
         <action
             android:id="@+id/action_quizEntry3_to_quizQuestion"
@@ -17,6 +17,6 @@
     </fragment>
     <fragment
         android:id="@+id/quizQuestion"
-        android:name="com.example.devopsapp.devweek.quizplay.QuizQuestion"
+        android:name="com.example.devopsapp.devweek.quiz_ui.QuizQuestion"
         android:label="QuizQuestion" />
 </navigation>

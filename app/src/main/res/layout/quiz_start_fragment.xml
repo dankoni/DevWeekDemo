@@ -3,11 +3,47 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".quizentry.QuizEntry">
+    tools:context=".quiz_ui.QuizEntry"
+    android:background="@android:color/darker_gray">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Hello" />
+   <LinearLayout
+       android:layout_gravity="center"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:orientation="vertical"
+       android:padding="10dp"
+       >
+       <TextView
+           android:layout_gravity="center"
+           android:id="@+id/title"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:textAllCaps="true"
+           android:textSize="16sp"
+           android:text="Welcome to DevWeek Quiz"
+           android:textColor="@android:color/holo_orange_dark"
+           />
+
+       <TextView
+           android:layout_marginTop="20dp"
+           android:layout_gravity="center"
+           android:id="@+id/rule_new_game"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:textAllCaps="false"
+           android:textSize="14sp"
+           android:text="To start new game swipe left"
+           android:textColor="@android:color/black"/>
+
+       <TextView
+           android:layout_gravity="center"
+           android:id="@+id/rule_review"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:textAllCaps="false"
+           android:textSize="14sp"
+           android:text="To review past games swipe right"
+           android:textColor="@android:color/black"/>
+   </LinearLayout>
 
 </FrameLayout>

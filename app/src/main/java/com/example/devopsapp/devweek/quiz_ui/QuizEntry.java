@@ -1,5 +1,6 @@
-package com.example.devopsapp.devweek.quizentry;
+package com.example.devopsapp.devweek.quiz_ui;
 
+import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -12,13 +13,15 @@ import android.view.ViewGroup;
 import com.example.devopsapp.devweek.R;
 import com.example.devopsapp.devweek.uidata.QuizViewModel;
 
+import javax.inject.Inject;
+
 public class QuizEntry extends Fragment {
+
 
     private QuizViewModel mViewModel;
 
-    public static QuizEntry newInstance() {
-        return new QuizEntry();
-    }
+    @Inject
+    ViewModelProvider.Factory viewModelFactory;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -29,7 +32,7 @@ public class QuizEntry extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mViewModel = ViewModelProviders.of(this).get(QuizViewModel.class);
+        mViewModel = ViewModelProviders.of(this, viewModelFactory).get(QuizViewModel.class);
         // TODO: Use the ViewModel
     }
 

@@ -1,8 +1,7 @@
-package com.example.devopsapp.devweek.quizplay;
+package com.example.devopsapp.devweek.quiz_ui;
 
+import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -12,16 +11,16 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.devopsapp.devweek.R;
-import com.example.devopsapp.devweek.quizentry.QuizEntry;
 import com.example.devopsapp.devweek.uidata.QuizViewModel;
+
+import javax.inject.Inject;
 
 
 public class QuizQuestion extends Fragment {
     private QuizViewModel mViewModel;
 
-    public static QuizQuestion newInstance() {
-        return new QuizQuestion();
-    }
+    @Inject
+    ViewModelProvider.Factory viewModelFactory;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -32,7 +31,7 @@ public class QuizQuestion extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mViewModel = ViewModelProviders.of(this).get(QuizViewModel.class);
+        mViewModel = ViewModelProviders.of(this,viewModelFactory).get(QuizViewModel.class);
         // TODO: Use the ViewModel
     }
 }
