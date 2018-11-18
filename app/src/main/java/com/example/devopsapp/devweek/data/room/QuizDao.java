@@ -21,6 +21,10 @@ public interface QuizDao {
     @Delete
     void delete(QuizEntity quiz);
 
-    @Query("SELECT * from quizes ORDERD by id ASC")
+    @Query("SELECT * from quizes ORDER by id ASC")
     LiveData<List<QuizEntity>> returnAllQuizes();
+
+    @Query("SELECT * from quizes WHERE  id=:id")
+    LiveData<QuizEntity> returnQuizById(final int id);
+
 }

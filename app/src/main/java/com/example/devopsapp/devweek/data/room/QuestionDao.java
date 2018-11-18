@@ -22,5 +22,8 @@ public interface QuestionDao {
     void delete(QuestionEntity question);
 
     @Query("SELECT * from questions WHERE quizId=:quizId")
-    LiveData<List<QuestionEntity>> findAllQuestionsFromQuiz(final int quizId);
+    LiveData<List<QuestionEntity>> findAllQuestionsFromQuizForGivenId(final int quizId);
+
+    @Query("SELECT * from questions WHERE id=:id")
+    LiveData<QuestionEntity>  getQuestionById(final int id);
 }

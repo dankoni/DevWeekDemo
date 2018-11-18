@@ -15,7 +15,7 @@ public abstract class QuizDatabase extends RoomDatabase {
 
     private static volatile QuizDatabase INSTANCE;
 
-    static QuizDatabase getDatabase(final Context context) {
+    public static QuizDatabase getDatabase(final Context context) {
         if (INSTANCE == null) {
             synchronized (QuizDatabase.class) {
                 if (INSTANCE == null) {
