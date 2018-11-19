@@ -1,6 +1,5 @@
 package com.example.devopsapp.devweek.data.room;
 
-import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
@@ -22,8 +21,8 @@ public interface QuestionDao {
     void delete(QuestionEntity question);
 
     @Query("SELECT * from questions WHERE quizId=:quizId")
-    LiveData<List<QuestionEntity>> findAllQuestionsFromQuizForGivenId(final int quizId);
+    List<QuestionEntity> findAllQuestionsFromQuizForGivenId(final int quizId);
 
     @Query("SELECT * from questions WHERE id=:id")
-    LiveData<QuestionEntity>  getQuestionById(final int id);
+    QuestionEntity getQuestionById(final int id);
 }
