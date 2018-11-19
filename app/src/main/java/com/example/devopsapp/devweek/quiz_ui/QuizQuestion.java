@@ -22,6 +22,9 @@ public class QuizQuestion extends Fragment {
     @Inject
     ViewModelProvider.Factory viewModelFactory;
 
+    public QuizQuestion() {
+    }
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
