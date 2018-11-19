@@ -1,12 +1,15 @@
 package com.example.devopsapp.devweek;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.widget.Toast;
+
+import com.example.devopsapp.devweek.quiz_ui.NavigationListener;
 
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements NavigationListener {
 
     private NavController navController;
 
@@ -15,7 +18,14 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-         navController = Navigation.findNavController(this, R.id.fragment);
-         navController.navigate(R.id.quizEntry);
+        navController = Navigation.findNavController(this, R.id.fragment);
+        navController.navigate(R.id.quizEntry);
+
+    }
+
+    @Override
+    public void get2question() {
+        Toast.makeText(MainActivity.this, "fffff", Toast.LENGTH_LONG).show();
+        navController.navigate(R.id.action_move2question);
     }
 }

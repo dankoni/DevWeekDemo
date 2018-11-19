@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph.xml"
     app:startDestination="@id/quizEntry">
 
@@ -10,7 +9,7 @@
         android:name="com.example.devopsapp.devweek.quiz_ui.QuizEntry"
         android:label="QuizEntry">
         <action
-            android:id="@+id/action_quizEntry3_to_quizQuestion"
+            android:id="@+id/action_move2question"
             app:destination="@id/quizQuestion"
             app:enterAnim="@anim/nav_default_enter_anim"
             app:exitAnim="@anim/nav_default_exit_anim" />

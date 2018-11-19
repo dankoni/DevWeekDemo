@@ -28,7 +28,7 @@ public class QuizQuestion extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.quiz_start_fragment, container, false);
+        return inflater.inflate(R.layout.fragment_new_quiz, container, false);
     }
 
     @Override
