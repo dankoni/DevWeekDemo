@@ -14,8 +14,8 @@ public class QuizViewModel extends ViewModel {
 
 
     @Inject
-    public QuizViewModel(QuizRepository quizRepository) {
-        this.quizRepository = quizRepository;
+    public QuizViewModel() {
+        this.quizRepository = new QuizRepository();
     }
 
 

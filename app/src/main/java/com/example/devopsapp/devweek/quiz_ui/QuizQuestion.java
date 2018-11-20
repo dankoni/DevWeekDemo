@@ -1,6 +1,5 @@
 package com.example.devopsapp.devweek.quiz_ui;
 
-import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -15,14 +14,10 @@ import com.example.devopsapp.devweek.R;
 import com.example.devopsapp.devweek.data.network.Question;
 import com.example.devopsapp.devweek.uidata.QuizViewModel;
 
-import javax.inject.Inject;
-
 
 public class QuizQuestion extends Fragment {
     private QuizViewModel mViewModel;
 
-    @Inject
-    ViewModelProvider.Factory viewModelFactory;
     private TextView test;
 
     public QuizQuestion() {
@@ -41,7 +36,8 @@ public class QuizQuestion extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mViewModel = ViewModelProviders.of(this,viewModelFactory).get(QuizViewModel.class);
+        mViewModel = ViewModelProviders.of(this).get(QuizViewModel.class);
+        mViewModel.loadQuestion();
         mViewModel.getQuestionLiveData().observe(this, this::onQuestionLoaded);
     }
 
