@@ -4,7 +4,6 @@ import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProvider;
 
 import com.example.devopsapp.devweek.uidata.QuizViewModel;
-import com.example.devopsapp.devweek.uidata.QuizViewModel_Factory;
 
 import dagger.Binds;
 import dagger.Module;
@@ -16,8 +15,7 @@ abstract class ViewModelModule {
     @Binds
     @IntoMap
     @ViewModelKey(QuizViewModel.class)
-    abstract ViewModel bindHomeViewModel(QuizViewModel quizViewModel);
-
+    abstract ViewModel bindQuizViewModel(QuizViewModel quizViewModel);
 
 
     @Binds

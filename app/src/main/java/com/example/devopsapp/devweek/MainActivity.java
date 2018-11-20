@@ -1,15 +1,15 @@
 package com.example.devopsapp.devweek;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
+import com.example.devopsapp.devweek.base.BaseActivity;
 import com.example.devopsapp.devweek.quiz_ui.NavigationListener;
 
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
-public class MainActivity extends AppCompatActivity implements NavigationListener {
+public class MainActivity extends BaseActivity implements NavigationListener {
 
     private NavController navController;
 

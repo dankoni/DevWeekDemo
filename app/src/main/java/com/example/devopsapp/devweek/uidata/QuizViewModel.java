@@ -12,8 +12,6 @@ public class QuizViewModel extends ViewModel {
 
     private QuizRepository quizRepository;
 
-    public QuizViewModel() {
-    }
 
     @Inject
     public QuizViewModel(QuizRepository quizRepository) {

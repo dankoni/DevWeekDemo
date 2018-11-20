@@ -37,6 +37,7 @@ public class QuizRepository {
         questionsDao = quizDatabase.getQuestionDao();
         this.quizApi = quizApi;
         compositeDisposable = new CompositeDisposable();
+        questionLiveData = new MutableLiveData<>();
     }
 
 
