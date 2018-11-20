@@ -9,8 +9,10 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.example.devopsapp.devweek.R;
+import com.example.devopsapp.devweek.data.network.Question;
 import com.example.devopsapp.devweek.uidata.QuizViewModel;
 
 import javax.inject.Inject;
@@ -21,6 +23,7 @@ public class QuizQuestion extends Fragment {
 
     @Inject
     ViewModelProvider.Factory viewModelFactory;
+    private TextView test;
 
     public QuizQuestion() {
     }
@@ -28,13 +31,24 @@ public class QuizQuestion extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_new_quiz, container, false);
+        View view = inflater.inflate(R.layout.fragment_new_quiz, container, false);
+
+        test = view.findViewById(R.id.question_text);
+
+        return view;
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mViewModel = ViewModelProviders.of(this,viewModelFactory).get(QuizViewModel.class);
-        // TODO: Use the ViewModel
+        mViewModel.getQuestionLiveData().observe(this, this::onQuestionLoaded);
     }
+
+    private void onQuestionLoaded(Question question) {
+
+        test.setText(question.getResults().get(0).getQuestion());
+    }
+
+
 }
