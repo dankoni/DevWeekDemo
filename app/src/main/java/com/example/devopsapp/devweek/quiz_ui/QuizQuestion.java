@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,13 +13,21 @@ import android.widget.TextView;
 
 import com.example.devopsapp.devweek.R;
 import com.example.devopsapp.devweek.data.network.Question;
+import com.example.devopsapp.devweek.data.network.Result;
 import com.example.devopsapp.devweek.uidata.QuizViewModel;
+
+import java.util.HashSet;
+import java.util.Set;
 
 
 public class QuizQuestion extends Fragment {
     private QuizViewModel mViewModel;
 
-    private TextView test;
+    private TextView mQuestionTextView;
+    private Set<String> mAnswers;
+    private String mType;
+    private String mTextOfQuestion;
+    private View mAnswersLayout;
 
     public QuizQuestion() {
     }
@@ -28,8 +37,18 @@ public class QuizQuestion extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_new_quiz, container, false);
 
-        test = view.findViewById(R.id.question_text);
+        mQuestionTextView = view.findViewById(R.id.question_text);
+        mAnswersLayout = view.findViewById(R.id.answer_holder);
 
+        view.setOnTouchListener(new OnSwipeTouchListener(getActivity()) {
+            public void onSwipeRight() {
+
+            }
+
+            public void onSwipeLeft() {
+
+            }
+        });
         return view;
     }
 
@@ -42,8 +61,26 @@ public class QuizQuestion extends Fragment {
     }
 
     private void onQuestionLoaded(Question question) {
+        Result result = question.getResults().get(0);
+        mTextOfQuestion = result.getQuestion();
+        mType = result.getType();
+        mAnswers = new HashSet<>();
+        mAnswers.add(result.getCorrectAnswer());
+        for (String text: result.getIncorrectAnswers()
+             ) {
+            mAnswers.add(text);
+        }
 
-        test.setText(question.getResults().get(0).getQuestion());
+        initViews();
+
+    }
+
+    private void initViews() {
+        mQuestionTextView.setText(mTextOfQuestion);
+        FragmentManager fragmentManager = getChildFragmentManager();
+        BooleanFragment booleanFragment = new BooleanFragment();
+        fragmentManager.beginTransaction().replace(R.id.answer_holder,booleanFragment).commit();
+
     }
 
 

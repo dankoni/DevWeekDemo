@@ -42,12 +42,12 @@ dependencies {
     // this library depends on the Kotlin standard library
     androidTestImplementation "android.arch.navigation:navigation-testing:$nav_version"
 
-
     //room
     def room_version = "1.1.1"
 
     implementation "android.arch.persistence.room:runtime:$room_version"
-    annotationProcessor "android.arch.persistence.room:compiler:$room_version" // use kapt for Kotlin
+    annotationProcessor "android.arch.persistence.room:compiler:$room_version"
+    // use kapt for Kotlin
 
     // optional - RxJava support for Room
     implementation "android.arch.persistence.room:rxjava2:$room_version"
@@ -67,7 +67,7 @@ dependencies {
     //okhttp
     def okhttp_version = "3.9.0"
     implementation "com.squareup.okhttp3:okhttp:$okhttp_version"
-    implementation"com.squareup.okhttp3:logging-interceptor:$okhttp_version"
+    implementation "com.squareup.okhttp3:logging-interceptor:$okhttp_version"
 
     //rxjava
 
