@@ -25,6 +25,7 @@ public class AnswerData implements Parcelable {
     public AnswerData(List<String> answersSet, String correctAnswer) {
         this.answersSet = answersSet;
         this.correctAnswer = correctAnswer;
+        answersSet.add(correctAnswer);
     }
 
     private AnswerData(Parcel in) {
@@ -37,16 +38,8 @@ public class AnswerData implements Parcelable {
         return answersSet;
     }
 
-    public void setAnswersSet(List<String> answersSet) {
-        this.answersSet = answersSet;
-    }
-
     public String getCorrectAnswer() {
         return correctAnswer;
-    }
-
-    public void setCorrectAnswer(String correctAnswer) {
-        this.correctAnswer = correctAnswer;
     }
 
     @Override

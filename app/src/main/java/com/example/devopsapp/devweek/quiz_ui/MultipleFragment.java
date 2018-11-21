@@ -75,7 +75,7 @@ public class MultipleFragment extends Fragment {
         for (String text : data.getAnswersSet()
                 ) {
             RadioFragment radioFragment = RadioFragment.newInstance(text);
-            fragmentManager.beginTransaction().add(R.id.answer_holder_set, radioFragment, "radio " + number).commit();
+            fragmentManager.beginTransaction().add(R.id.answer_holder_set, radioFragment, text).commit();
             number++;
             fragmentBag.add(radioFragment);
         }
@@ -89,13 +89,24 @@ public class MultipleFragment extends Fragment {
 
         for (RadioFragment fragment : fragmentBag
                 ) {
-
             if (tag.contentEquals(fragment.getTag())) {
                 fragment.setClicked(true);
+                checkAnswer(tag);
             } else {
                 fragment.setClicked(false);
             }
         }
+
+    }
+
+    private void checkAnswer(String answer) {
+
+        if (answer.contentEquals(data.getCorrectAnswer())) {
+            EventBus.getDefault().post(new AnswerEvent(true));
+        } else {
+            EventBus.getDefault().post(new AnswerEvent(false));
+        }
+
 
     }
 
