@@ -77,4 +77,8 @@ dependencies {
     implementation "io.reactivex.rxjava2:rxjava:$rxjava2_version"
     implementation "io.reactivex.rxjava2:rxandroid:$rx_android_version"
 
+
+    //EventBus
+    implementation 'org.greenrobot:eventbus:3.1.1'
+
 }

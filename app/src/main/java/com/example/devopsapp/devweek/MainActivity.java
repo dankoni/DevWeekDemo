@@ -2,7 +2,6 @@ package com.example.devopsapp.devweek;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.widget.Toast;
 
 import com.example.devopsapp.devweek.quiz_ui.NavigationListener;
 
@@ -25,7 +24,6 @@ public class MainActivity extends AppCompatActivity implements NavigationListene
 
     @Override
     public void get2question() {
-        Toast.makeText(MainActivity.this, "fffff", Toast.LENGTH_LONG).show();
         navController.navigate(R.id.action_move2question);
     }
 

@@ -72,7 +72,7 @@ public class BooleanFragment extends Fragment {
             case R.id.false_radio:
                 if (checked)
                     mTrue.setChecked(false);
-                checkAnswer(true);
+                checkAnswer(false);
                 break;
         }
     }

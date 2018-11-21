@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.devopsapp.devweek.R;
 import com.example.devopsapp.devweek.data.network.Question;
@@ -41,15 +42,6 @@ public class QuizQuestion extends Fragment {
         mQuestionTextView = view.findViewById(R.id.question_text);
         mAnswersLayout = view.findViewById(R.id.answer_holder);
 
-        view.setOnTouchListener(new OnSwipeTouchListener(getActivity()) {
-            public void onSwipeRight() {
-
-            }
-
-            public void onSwipeLeft() {
-
-            }
-        });
         return view;
 
     }
@@ -69,7 +61,10 @@ public class QuizQuestion extends Fragment {
 
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void AnswerEvent(AnswerEvent event) {/* Do something */}
+    public void AnswerEvent(AnswerEvent event) {
+        Toast.makeText(getActivity(), String.valueOf(event.isCorrect()), Toast.LENGTH_LONG).show();
+        mViewModel.loadQuestion();
+    }
 
 
     @Override
