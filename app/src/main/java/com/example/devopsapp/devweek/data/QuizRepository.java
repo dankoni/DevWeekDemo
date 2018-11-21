@@ -11,9 +11,7 @@ import com.example.devopsapp.devweek.data.network.QuizRetrofitModule;
 import com.example.devopsapp.devweek.data.network.Result;
 import com.example.devopsapp.devweek.data.room.QuestionDao;
 import com.example.devopsapp.devweek.data.room.QuestionEntity;
-import com.example.devopsapp.devweek.data.room.QuizDao;
 import com.example.devopsapp.devweek.data.room.QuizDatabase;
-import com.example.devopsapp.devweek.data.room.QuizEntity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -68,33 +66,10 @@ public class QuizRepository {
     }
 
     private void onQuestionLoaded(Question question) {
-        new PopulateDbAsync(quizDatabase, question).execute();
-        sendQuestion();
+        new PopulateDbAsync(quizDatabase, question, questionLiveData).execute();
     }
 
-    private void sendQuestion() {
 
-        mExecutor.execute(new Runnable() {
-            @Override
-            public void run() {
-                List<QuestionEntity> questionEntityList = questionDao.findAllQuestionsFromQuizForGivenId(1);
-                QuestionEntity questionEntity = questionEntityList.get(0);
-                Question question = new Question();
-                question.setResponseCode(1);
-                Result result = new Result();
-                result.setType(questionEntity.getType());
-                result.setCorrectAnswer(questionEntity.getCorrect_answer());
-                result.setIncorrectAnswers(questionEntity.getIncorrect_answers());
-                result.setQuestion(questionEntity.getQuestion());
-                ArrayList<Result> resultList = new ArrayList<Result>();
-                resultList.add(result);
-                question.setResults(resultList);
-                questionLiveData.postValue(new Question());
-            }
-        });
-
-
-    }
 
     public LiveData<Question> getQuestionLiveData() {
         return questionLiveData;
@@ -104,13 +79,13 @@ public class QuizRepository {
 
 
         private final QuestionDao questionDao;
-        private final QuizDao mQuizDao;
         private List<Result> questionSet;
+        private MutableLiveData<Question> questionLiveData;
 
-        PopulateDbAsync(QuizDatabase db, Question question) {
+        PopulateDbAsync(QuizDatabase db, Question question, MutableLiveData<Question> liveData) {
             questionSet = question.getResults();
             questionDao = db.getQuestionDao();
-            mQuizDao = db.getQuizDao();
+            this.questionLiveData = liveData;
 
         }
 
@@ -119,15 +94,31 @@ public class QuizRepository {
         protected Void doInBackground(final Void... params) {
             // questionDao.deleteAll();
 
-            mQuizDao.insert(new QuizEntity(1, "title"));
-
             for (Result result : questionSet
                     ) {
-                QuestionEntity questionEntity = new QuestionEntity(0, result.getType(), result.getQuestion(), result.getCorrectAnswer(), 1, result.getIncorrectAnswers());
+                QuestionEntity questionEntity = new QuestionEntity(0, result.getType(), result.getQuestion(), result.getCorrectAnswer(), result.getIncorrectAnswers());
                 questionDao.insert(questionEntity);
             }
 
             return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            List<QuestionEntity> questionEntityList = questionDao.findAllQuestionsFromQuizForGivenId();
+            QuestionEntity questionEntity = questionEntityList.get(0);
+            Question question = new Question();
+            question.setResponseCode(1);
+            Result result = new Result();
+            result.setType(questionEntity.getType());
+            result.setCorrectAnswer(questionEntity.getCorrect_answer());
+            result.setIncorrectAnswers(questionEntity.getIncorrect_answers());
+            result.setQuestion(questionEntity.getQuestion());
+            ArrayList<Result> resultList = new ArrayList<Result>();
+            resultList.add(result);
+            question.setResults(resultList);
+            questionLiveData.postValue(question);
         }
     }
 
