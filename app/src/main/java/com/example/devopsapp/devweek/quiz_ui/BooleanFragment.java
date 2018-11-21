@@ -17,7 +17,9 @@ import com.example.devopsapp.devweek.uidata.models.AnswerData;
 public class BooleanFragment extends Fragment {
 
     private QuizViewModel mViewModel;
-    private RadioButton mTest;
+    private RadioButton mTrue;
+    private RadioButton mFalse;
+
     private AnswerData data;
 
     private OnUserAnswered mUserAnsweredListener;
@@ -43,7 +45,8 @@ public class BooleanFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.boollean_answer, container, false);
-        mTest = view.findViewById(R.id.true_radio);
+        mTrue = (RadioButton) view.findViewById(R.id.true_radio);
+        mFalse = (RadioButton) view.findViewById(R.id.false_radio);
         initAnswers();
         return view;
     }
@@ -67,10 +70,40 @@ public class BooleanFragment extends Fragment {
 
 
     private void initAnswers() {
-        mTest.setText(data.getCorrectAnswer());
+        mTrue.setOnClickListener(this::whichButtonIsChecked);
+        mFalse.setOnClickListener(this::whichButtonIsChecked);
     }
 
 
+    public void whichButtonIsChecked(View view) {
+        // Is the button now checked?
+        boolean checked = ((RadioButton) view).isChecked();
+
+        // Check which radio button was clicked
+        switch (view.getId()) {
+            case R.id.true_radio:
+                if (checked)
+                    mFalse.setChecked(false);
+                checkAnswer(true);
+                break;
+            case R.id.false_radio:
+                if (checked)
+                    mTrue.setChecked(false);
+                checkAnswer(true);
+                break;
+        }
+    }
+
+    private void checkAnswer(boolean answer) {
+
+        if (answer == Boolean.valueOf(data.getCorrectAnswer())) {
+            mUserAnsweredListener.userAnswer(true);
+        } else {
+            mUserAnsweredListener.userAnswer(false);
+        }
+
+
+    }
 
 
 }
