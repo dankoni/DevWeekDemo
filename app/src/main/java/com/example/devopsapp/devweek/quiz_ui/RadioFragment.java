@@ -10,6 +10,8 @@ import android.widget.RadioButton;
 
 import com.example.devopsapp.devweek.R;
 
+import org.greenrobot.eventbus.EventBus;
+
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link RadioFragment#newInstance} factory method to
@@ -52,9 +54,19 @@ public class RadioFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.radio_button_answer, container, false);
         mRadioButton = view.findViewById(R.id.radioButton);
-
         mRadioButton.setText(answerText);
+
+        mRadioButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                EventBus.getDefault().post(new RadioClicked(RadioFragment.this.getTag()));
+            }
+        });
         return view;
+    }
+
+    public void setClicked(boolean clicked) {
+        mRadioButton.setChecked(clicked);
     }
 
 }

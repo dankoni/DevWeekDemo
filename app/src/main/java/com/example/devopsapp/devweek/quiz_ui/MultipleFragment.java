@@ -1,6 +1,5 @@
 package com.example.devopsapp.devweek.quiz_ui;
 
-import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -9,17 +8,25 @@ import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RadioButton;
 
 import com.example.devopsapp.devweek.R;
 import com.example.devopsapp.devweek.uidata.QuizViewModel;
 import com.example.devopsapp.devweek.uidata.models.AnswerData;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MultipleFragment extends Fragment {
 
     private QuizViewModel mViewModel;
 
     private AnswerData data;
+
+    private List<RadioFragment> fragmentBag;
 
     public static MultipleFragment newInstance(AnswerData data) {
 
@@ -46,33 +53,54 @@ public class MultipleFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
+
     private void initView() {
         FragmentManager fragmentManager = getChildFragmentManager();
+        int number = 0;
+
+        fragmentBag = new ArrayList<>();
 
         for (String text : data.getAnswersSet()
                 ) {
             RadioFragment radioFragment = RadioFragment.newInstance(text);
-            fragmentManager.beginTransaction().add(R.id.answer_holder_set, radioFragment).commit();
+            fragmentManager.beginTransaction().add(R.id.answer_holder_set, radioFragment, "radio " + number).commit();
+            number++;
+            fragmentBag.add(radioFragment);
         }
 
     }
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        mViewModel = ViewModelProviders.of(this).get(QuizViewModel.class);
-        // TODO: Use the ViewModel
-    }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onRadioClicked(RadioClicked event) {
+        String tag = event.getTag();
 
-    public void whichButtonIsChecked(View view) {
-        // Is the button now checked?
-        boolean checked = ((RadioButton) view).isChecked();
+        for (RadioFragment fragment : fragmentBag
+                ) {
 
-        if (checked) {
-
+            if (tag.contentEquals(fragment.getTag())) {
+                fragment.setClicked(true);
+            } else {
+                fragment.setClicked(false);
+            }
         }
-        //TODO check other to uncheck
+
     }
+
+
+
+
 
 }
