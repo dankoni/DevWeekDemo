@@ -1,6 +1,5 @@
 package com.example.devopsapp.devweek.quiz_ui;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -14,6 +13,8 @@ import com.example.devopsapp.devweek.R;
 import com.example.devopsapp.devweek.uidata.QuizViewModel;
 import com.example.devopsapp.devweek.uidata.models.AnswerData;
 
+import org.greenrobot.eventbus.EventBus;
+
 public class BooleanFragment extends Fragment {
 
     private QuizViewModel mViewModel;
@@ -21,8 +22,6 @@ public class BooleanFragment extends Fragment {
     private RadioButton mFalse;
 
     private AnswerData data;
-
-    private OnUserAnswered mUserAnsweredListener;
 
     public static BooleanFragment newInstance(AnswerData answerData) {
         BooleanFragment fragment = new BooleanFragment();
@@ -51,22 +50,6 @@ public class BooleanFragment extends Fragment {
         return view;
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnUserAnswered) {
-            mUserAnsweredListener = (OnUserAnswered) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnUserAnswered");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mUserAnsweredListener = null;
-    }
 
 
     private void initAnswers() {
@@ -97,9 +80,9 @@ public class BooleanFragment extends Fragment {
     private void checkAnswer(boolean answer) {
 
         if (answer == Boolean.valueOf(data.getCorrectAnswer())) {
-            mUserAnsweredListener.userAnswer(true);
+            EventBus.getDefault().post(new AnswerEvent(true));
         } else {
-            mUserAnsweredListener.userAnswer(false);
+            EventBus.getDefault().post(new AnswerEvent(false));
         }
 
 

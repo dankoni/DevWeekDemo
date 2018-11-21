@@ -17,6 +17,10 @@ import com.example.devopsapp.devweek.data.network.Result;
 import com.example.devopsapp.devweek.uidata.QuizViewModel;
 import com.example.devopsapp.devweek.uidata.models.AnswerData;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 
 public class QuizQuestion extends Fragment {
     private QuizViewModel mViewModel;
@@ -50,6 +54,24 @@ public class QuizQuestion extends Fragment {
 
     }
 
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void AnswerEvent(AnswerEvent event) {/* Do something */}
+
+
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -72,9 +94,15 @@ public class QuizQuestion extends Fragment {
     private void initViews(AnswerData data) {
         mQuestionTextView.setText(mTextOfQuestion);
         FragmentManager fragmentManager = getChildFragmentManager();
-        BooleanFragment booleanFragment = BooleanFragment.newInstance(data);
 
-        fragmentManager.beginTransaction().replace(R.id.answer_holder,booleanFragment).commit();
+        if (mType.contentEquals("multiple")) {
+            MultipleFragment multipleFragment = MultipleFragment.newInstance(data);
+            fragmentManager.beginTransaction().replace(R.id.answer_holder, multipleFragment).commit();
+        } else if (mType.contentEquals("boolean")) {
+            BooleanFragment booleanFragment = BooleanFragment.newInstance(data);
+            fragmentManager.beginTransaction().replace(R.id.answer_holder, booleanFragment).commit();
+        }
+
 
     }
 

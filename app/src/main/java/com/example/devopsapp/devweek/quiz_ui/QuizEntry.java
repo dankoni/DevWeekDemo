@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 import com.example.devopsapp.devweek.MainActivity;
 import com.example.devopsapp.devweek.R;
 
-public class QuizEntry extends Fragment implements OnUserAnswered {
+public class QuizEntry extends Fragment {
     NavigationListener navigationListener;
 
     @Override
@@ -45,8 +45,4 @@ public class QuizEntry extends Fragment implements OnUserAnswered {
         }
     }
 
-    @Override
-    public void userAnswer(boolean correct) {
-
-    }
 }
