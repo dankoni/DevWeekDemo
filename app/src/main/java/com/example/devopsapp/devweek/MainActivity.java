@@ -5,11 +5,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
 import com.example.devopsapp.devweek.quiz_ui.NavigationListener;
+import com.example.devopsapp.devweek.quiz_ui.OnUserAnswered;
 
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
-public class MainActivity extends AppCompatActivity implements NavigationListener {
+public class MainActivity extends AppCompatActivity implements NavigationListener, OnUserAnswered {
 
     private NavController navController;
 
@@ -27,5 +28,10 @@ public class MainActivity extends AppCompatActivity implements NavigationListene
     public void get2question() {
         Toast.makeText(MainActivity.this, "fffff", Toast.LENGTH_LONG).show();
         navController.navigate(R.id.action_move2question);
+    }
+
+    @Override
+    public void userAnswer(boolean correct) {
+
     }
 }

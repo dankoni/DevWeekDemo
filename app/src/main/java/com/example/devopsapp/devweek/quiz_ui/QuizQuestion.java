@@ -15,16 +15,13 @@ import com.example.devopsapp.devweek.R;
 import com.example.devopsapp.devweek.data.network.Question;
 import com.example.devopsapp.devweek.data.network.Result;
 import com.example.devopsapp.devweek.uidata.QuizViewModel;
-
-import java.util.HashSet;
-import java.util.Set;
+import com.example.devopsapp.devweek.uidata.models.AnswerData;
 
 
 public class QuizQuestion extends Fragment {
     private QuizViewModel mViewModel;
 
     private TextView mQuestionTextView;
-    private Set<String> mAnswers;
     private String mType;
     private String mTextOfQuestion;
     private View mAnswersLayout;
@@ -50,6 +47,7 @@ public class QuizQuestion extends Fragment {
             }
         });
         return view;
+
     }
 
     @Override
@@ -64,21 +62,18 @@ public class QuizQuestion extends Fragment {
         Result result = question.getResults().get(0);
         mTextOfQuestion = result.getQuestion();
         mType = result.getType();
-        mAnswers = new HashSet<>();
-        mAnswers.add(result.getCorrectAnswer());
-        for (String text: result.getIncorrectAnswers()
-             ) {
-            mAnswers.add(text);
-        }
 
-        initViews();
+        AnswerData data = new AnswerData(result.getIncorrectAnswers(), result.getCorrectAnswer());
+
+        initViews(data);
 
     }
 
-    private void initViews() {
+    private void initViews(AnswerData data) {
         mQuestionTextView.setText(mTextOfQuestion);
         FragmentManager fragmentManager = getChildFragmentManager();
-        BooleanFragment booleanFragment = new BooleanFragment();
+        BooleanFragment booleanFragment = BooleanFragment.newInstance(data);
+
         fragmentManager.beginTransaction().replace(R.id.answer_holder,booleanFragment).commit();
 
     }
