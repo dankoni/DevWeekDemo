@@ -6,13 +6,11 @@ import android.arch.persistence.room.RoomDatabase;
 import android.arch.persistence.room.TypeConverters;
 import android.content.Context;
 
-@Database(entities = {QuizEntity.class, QuestionEntity.class}, version = 2, exportSchema = false)
+@Database(entities = {QuestionEntity.class}, version = 1, exportSchema = false)
 @TypeConverters({IncorrectSetConverter.class})
 public abstract class QuizDatabase extends RoomDatabase {
 
     public static final String database_name = "quiz_database";
-
-    public abstract QuizDao getQuizDao();
 
     public abstract QuestionDao getQuestionDao();
 
@@ -26,6 +24,7 @@ public abstract class QuizDatabase extends RoomDatabase {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                             QuizDatabase.class, database_name)
                             .fallbackToDestructiveMigration()
+                            .allowMainThreadQueries()
                             .build();
                 }
             }

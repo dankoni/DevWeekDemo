@@ -8,7 +8,6 @@ import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 
 public class IncorrectSetConverter {
 
@@ -20,7 +19,8 @@ public class IncorrectSetConverter {
             return Collections.emptyList();
         }
 
-        Type listType = new TypeToken<Set<String>>() {}.getType();
+        Type listType = new TypeToken<List<String>>() {
+        }.getType();
 
         return gson.fromJson(data, listType);
     }

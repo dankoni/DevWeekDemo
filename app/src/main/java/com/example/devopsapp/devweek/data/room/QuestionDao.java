@@ -20,8 +20,8 @@ public interface QuestionDao {
     @Delete
     void delete(QuestionEntity question);
 
-    @Query("SELECT * from questions WHERE quizId=:quizId")
-    List<QuestionEntity> findAllQuestionsFromQuizForGivenId(final int quizId);
+    @Query("SELECT * from questions")
+    List<QuestionEntity> findAllQuestionsFromQuizForGivenId();
 
     @Query("SELECT * from questions WHERE id=:id")
     QuestionEntity getQuestionById(final int id);

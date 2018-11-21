@@ -1,21 +1,13 @@
 package com.example.devopsapp.devweek.data.room;
 
 import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.ForeignKey;
-import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 
 import java.util.List;
 
 import io.reactivex.annotations.NonNull;
 
-import static android.arch.persistence.room.ForeignKey.CASCADE;
-
-@Entity(tableName = "questions",
-        foreignKeys = @ForeignKey(entity = QuizEntity.class,
-        parentColumns = "id",
-        childColumns = "quizId",
-        onDelete = CASCADE),indices = {@Index(value = {"quizId"})})
+@Entity(tableName = "questions")
 public class QuestionEntity {
 
     @PrimaryKey(autoGenerate = true)
@@ -28,16 +20,13 @@ public class QuestionEntity {
 
     private final String correct_answer;
 
-    private final int quizId;
-
     private List<String> incorrect_answers;
 
-    public QuestionEntity(int id, String type, String question, String correct_answer, int quizId, List<String> incorrect_answers) {
+    public QuestionEntity(int id, String type, String question, String correct_answer, List<String> incorrect_answers) {
         this.id = id;
         this.type = type;
         this.question = question;
         this.correct_answer = correct_answer;
-        this.quizId = quizId;
         this.incorrect_answers = incorrect_answers;
     }
 
@@ -62,7 +51,4 @@ public class QuestionEntity {
         return incorrect_answers;
     }
 
-    public int getQuizId() {
-        return quizId;
-    }
 }
