@@ -5,7 +5,7 @@ import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 
-import java.util.Set;
+import java.util.List;
 
 import io.reactivex.annotations.NonNull;
 
@@ -30,9 +30,9 @@ public class QuestionEntity {
 
     private final int quizId;
 
-    private Set<String> incorrect_answers;
+    private List<String> incorrect_answers;
 
-    public QuestionEntity(int id, String type, String question, String correct_answer, int quizId, Set<String> incorrect_answers) {
+    public QuestionEntity(int id, String type, String question, String correct_answer, int quizId, List<String> incorrect_answers) {
         this.id = id;
         this.type = type;
         this.question = question;
@@ -58,7 +58,7 @@ public class QuestionEntity {
         return correct_answer;
     }
 
-    public Set<String> getIncorrect_answers() {
+    public List<String> getIncorrect_answers() {
         return incorrect_answers;
     }
 
