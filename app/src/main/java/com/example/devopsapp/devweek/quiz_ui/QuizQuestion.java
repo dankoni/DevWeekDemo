@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,14 +14,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.devopsapp.devweek.R;
-import com.example.devopsapp.devweek.data.network.Question;
-import com.example.devopsapp.devweek.data.network.Result;
 import com.example.devopsapp.devweek.uidata.QuizViewModel;
 import com.example.devopsapp.devweek.uidata.models.AnswerData;
+import com.example.devopsapp.devweek.uidata.models.QuestionData;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+
+import java.util.List;
 
 
 public class QuizQuestion extends Fragment {
@@ -29,7 +31,10 @@ public class QuizQuestion extends Fragment {
     private TextView mQuestionTextView;
     private String mType;
     private String mTextOfQuestion;
-    private View mAnswersLayout;
+
+    private List<QuestionData> mQuestionList;
+
+    private int questionIndex;
 
     public QuizQuestion() {
     }
@@ -38,14 +43,10 @@ public class QuizQuestion extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_new_quiz, container, false);
-
         mQuestionTextView = view.findViewById(R.id.question_text);
-        mAnswersLayout = view.findViewById(R.id.answer_holder);
-
         return view;
 
     }
-
 
     @Override
     public void onStart() {
@@ -63,7 +64,7 @@ public class QuizQuestion extends Fragment {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void AnswerEvent(AnswerEvent event) {
         Toast.makeText(getActivity(), String.valueOf(event.isCorrect()), Toast.LENGTH_LONG).show();
-        mViewModel.loadQuestion();
+        setNextQuestion();
     }
 
 
@@ -75,16 +76,30 @@ public class QuizQuestion extends Fragment {
         mViewModel.loadQuestion();
     }
 
-    private void onQuestionLoaded(Question question) {
-        Result result = question.getResults().get(0);
-        mTextOfQuestion = result.getQuestion();
-        mType = result.getType();
-
-        AnswerData data = new AnswerData(result.getIncorrectAnswers(), result.getCorrectAnswer());
-
-        initViews(data);
+    private void onQuestionLoaded(List<QuestionData> questionData) {
+        mQuestionList = questionData;
+        if (mQuestionList.size() == 10) {
+            setNextQuestion();
+        }
 
     }
+
+    private void setNextQuestion() {
+
+
+        if (questionIndex < mQuestionList.size()) {
+            Log.d("TESTDATA", "setNextQuestion view");
+            mTextOfQuestion = mQuestionList.get(questionIndex).getText();
+            mType = mQuestionList.get(questionIndex).getType();
+            initViews(mQuestionList.get(questionIndex).getAnswerData());
+            questionIndex++;
+        } else {
+            Log.d("TESTDATA", "setNextQuestion load");
+            mViewModel.loadQuestion();
+            questionIndex = 0;
+        }
+    }
+
 
     private void initViews(AnswerData data) {
         mQuestionTextView.setText(mTextOfQuestion);

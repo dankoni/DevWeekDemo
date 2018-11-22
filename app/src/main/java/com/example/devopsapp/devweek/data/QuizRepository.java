@@ -3,8 +3,7 @@ package com.example.devopsapp.devweek.data;
 import android.app.Application;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
-import android.arch.persistence.db.SimpleSQLiteQuery;
-import android.os.AsyncTask;
+import android.arch.lifecycle.Transformations;
 
 import com.example.devopsapp.devweek.data.network.Question;
 import com.example.devopsapp.devweek.data.network.QuizApi;
@@ -13,6 +12,7 @@ import com.example.devopsapp.devweek.data.network.Result;
 import com.example.devopsapp.devweek.data.room.QuestionDao;
 import com.example.devopsapp.devweek.data.room.QuestionEntity;
 import com.example.devopsapp.devweek.data.room.QuizDatabase;
+import com.example.devopsapp.devweek.uidata.models.QuestionData;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,8 +36,7 @@ public class QuizRepository {
     private ExecutorService mExecutor;
 
     //LiveData observables
-    private MutableLiveData<Question> questionLiveData;
-    private int id = 1;
+    private LiveData<QuestionData> questionLiveData;
 
 
     public QuizRepository(Application application) {
@@ -52,114 +51,45 @@ public class QuizRepository {
     }
 
     public void loadNextQuestion() {
-        //getNewQuestionFromNetwork();
-        getNewQuestionFromDatabase();
+        loadFirstQuestionsIntoDatabase();
     }
 
-    public void loadFirstQuestionsIntoDatabase() {
+    private void loadFirstQuestionsIntoDatabase() {
         compositeDisposable.add(quizApi.getInitialQuestions()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe(this::onInitalLoad, throwable -> onError()));
     }
 
-   /* private void getNewQuestionFromNetwork() {
-        compositeDisposable.add(quizApi.getNextQuestion()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe(this::onQuestionLoaded, throwable -> onError()));
-    }*/
+    private List<QuestionData> transform2Question(List<QuestionEntity> questionEntity) {
 
-    private void getNewQuestionFromDatabase() {
-        questionDao.findAllQuestions().size();
-        questionLiveData.postValue(transform2Question(questionDao.getQuestionById(id)));
-        id++;
+        List<QuestionData> questionList = new ArrayList<>();
+
+        for (QuestionEntity q : questionEntity
+                ) {
+            QuestionData question = new QuestionData(q.getQuestion(),
+                    q.getType(), q.getIncorrect_answers(), q.getCorrect_answer());
+            questionList.add(question);
+        }
+        return questionList;
     }
-
-    private Question transform2Question(QuestionEntity questionEntity) {
-        Question question = new Question();
-        question.setResponseCode(1);
-        Result result = new Result();
-        result.setType(questionEntity.getType());
-        result.setCorrectAnswer(questionEntity.getCorrect_answer());
-        result.setIncorrectAnswers(questionEntity.getIncorrect_answers());
-        result.setQuestion(questionEntity.getQuestion());
-        ArrayList<Result> resultList = new ArrayList<Result>();
-        resultList.add(result);
-        question.setResults(resultList);
-
-        return question;
-    }
-
 
     private void onError() {
 
     }
 
-   /* private void onQuestionLoaded(Question question) {
-        questionLiveData.postValue(question);
-    }*/
-
     private void onInitalLoad(Question questions) {
-        new PopulateDbAsync(quizDatabase, questions).execute();
-    }
+        questionDao.deleteAll();
 
-
-
-    public LiveData<Question> getQuestionLiveData() {
-        return questionLiveData;
-    }
-
-    private static class PopulateDbAsync extends AsyncTask<Void, Void, Void> {
-
-
-        private final QuestionDao questionDao;
-        private List<Result> questionSet;
-        private QuizDatabase quizDatabase;
-
-        PopulateDbAsync(QuizDatabase db, Question question) {
-            questionSet = question.getResults();
-            questionDao = db.getQuestionDao();
-            quizDatabase = db;
+        for (Result result : questions.getResults()
+                ) {
+            QuestionEntity questionEntity = new QuestionEntity(0, result.getType(), result.getQuestion(), result.getCorrectAnswer(), result.getIncorrectAnswers());
+            questionDao.insert(questionEntity);
         }
-
-
-        @Override
-        protected Void doInBackground(final Void... params) {
-
-            // reset all auto-incrementalValues
-            SimpleSQLiteQuery query = new SimpleSQLiteQuery("DELETE FROM sqlite_sequence");
-
-
-            quizDatabase.beginTransaction();
-            try {
-                quizDatabase.clearAllTables();
-                quizDatabase.query(query);
-                quizDatabase.setTransactionSuccessful();
-            } catch (Exception e) {
-
-            } finally {
-                quizDatabase.endTransaction();
-            }
-
-            for (Result result : questionSet
-                    ) {
-                QuestionEntity questionEntity = new QuestionEntity(0, result.getType(), result.getQuestion(), result.getCorrectAnswer(), result.getIncorrectAnswers());
-                questionDao.insert(questionEntity);
-            }
-
-            return null;
-        }
-
-
     }
 
-
-    private void clearAll() {
-
-        // (quizDatabase != null) ? : return false;
-
-
+    public LiveData<List<QuestionData>> getQuestionLiveData() {
+        return Transformations.map(questionDao.findAllQuestions(), questions -> transform2Question(questions));
     }
 
 

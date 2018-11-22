@@ -5,7 +5,9 @@ import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 
 import com.example.devopsapp.devweek.data.QuizRepository;
-import com.example.devopsapp.devweek.data.network.Question;
+import com.example.devopsapp.devweek.uidata.models.QuestionData;
+
+import java.util.List;
 
 
 public class QuizViewModel extends AndroidViewModel {
@@ -15,14 +17,13 @@ public class QuizViewModel extends AndroidViewModel {
     public QuizViewModel(Application application) {
         super(application);
         this.quizRepository = new QuizRepository(application);
-        quizRepository.loadFirstQuestionsIntoDatabase();
     }
 
     public void loadQuestion() {
         quizRepository.loadNextQuestion();
     }
 
-    public LiveData<Question> getQuestionLiveData() {
+    public LiveData<List<QuestionData>> getQuestionLiveData() {
         return quizRepository.getQuestionLiveData();
     }
 

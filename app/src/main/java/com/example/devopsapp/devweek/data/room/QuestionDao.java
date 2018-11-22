@@ -22,13 +22,7 @@ public interface QuestionDao {
     void delete(QuestionEntity question);
 
     @Query("SELECT * from questions")
-    List<QuestionEntity> findAllQuestions();
-
-    @Query("SELECT * from questions WHERE id=:id")
-    QuestionEntity getQuestionById(final int id);
-
-    @Query("SELECT * from questions ORDER BY id ASC LIMIT 1")
-    LiveData<QuestionEntity> getFirstQuestion();
+    LiveData<List<QuestionEntity>> findAllQuestions();
 
     @Query("DELETE from questions")
     void deleteAll();
