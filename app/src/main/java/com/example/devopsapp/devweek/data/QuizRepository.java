@@ -16,8 +16,6 @@ import com.example.devopsapp.devweek.uidata.models.QuestionData;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
@@ -29,11 +27,8 @@ public class QuizRepository {
     private QuizDatabase quizDatabase;
     private CompositeDisposable compositeDisposable;
 
-
     private QuestionDao questionDao;
 
-
-    private ExecutorService mExecutor;
 
     //LiveData observables
     private LiveData<QuestionData> questionLiveData;
@@ -45,9 +40,6 @@ public class QuizRepository {
         questionDao = quizDatabase.getQuestionDao();
         compositeDisposable = new CompositeDisposable();
         questionLiveData = new MutableLiveData<>();
-        mExecutor = Executors.newFixedThreadPool(1);
-
-
     }
 
     public void loadNextQuestion() {
