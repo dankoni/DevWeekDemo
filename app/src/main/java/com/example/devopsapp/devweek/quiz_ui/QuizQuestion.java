@@ -15,6 +15,8 @@ import android.widget.Toast;
 import com.example.devopsapp.devweek.R;
 import com.example.devopsapp.devweek.data.network.Question;
 import com.example.devopsapp.devweek.data.network.Result;
+import com.example.devopsapp.devweek.quiz_ui.controls.BooleanFragment;
+import com.example.devopsapp.devweek.quiz_ui.controls.MultipleFragment;
 import com.example.devopsapp.devweek.uidata.QuizViewModel;
 import com.example.devopsapp.devweek.uidata.models.AnswerData;
 
@@ -29,7 +31,6 @@ public class QuizQuestion extends Fragment {
     private TextView mQuestionTextView;
     private String mType;
     private String mTextOfQuestion;
-    private View mAnswersLayout;
 
     public QuizQuestion() {
     }
@@ -40,7 +41,6 @@ public class QuizQuestion extends Fragment {
         View view = inflater.inflate(R.layout.fragment_new_quiz, container, false);
 
         mQuestionTextView = view.findViewById(R.id.question_text);
-        mAnswersLayout = view.findViewById(R.id.answer_holder);
 
         return view;
 

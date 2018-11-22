@@ -9,11 +9,15 @@
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:padding="10dp">
         <TextView
+            android:padding="5dp"
             android:id="@+id/question_text"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:textAllCaps="true"
+            android:textSize="18sp"
             android:text="" />
     </LinearLayout>
 

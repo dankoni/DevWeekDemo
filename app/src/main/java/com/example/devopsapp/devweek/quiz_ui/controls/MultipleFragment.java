@@ -1,4 +1,4 @@
-package com.example.devopsapp.devweek.quiz_ui;
+package com.example.devopsapp.devweek.quiz_ui.controls;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -10,7 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.devopsapp.devweek.R;
-import com.example.devopsapp.devweek.uidata.QuizViewModel;
+import com.example.devopsapp.devweek.quiz_ui.AnswerEvent;
+import com.example.devopsapp.devweek.quiz_ui.RadioClicked;
 import com.example.devopsapp.devweek.uidata.models.AnswerData;
 
 import org.greenrobot.eventbus.EventBus;
@@ -21,8 +22,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MultipleFragment extends Fragment {
-
-    private QuizViewModel mViewModel;
 
     private AnswerData data;
 
@@ -68,15 +67,12 @@ public class MultipleFragment extends Fragment {
 
     private void initView() {
         FragmentManager fragmentManager = getChildFragmentManager();
-        int number = 0;
-
         fragmentBag = new ArrayList<>();
 
         for (String text : data.getAnswersSet()
                 ) {
             RadioFragment radioFragment = RadioFragment.newInstance(text);
             fragmentManager.beginTransaction().add(R.id.answer_holder_set, radioFragment, text).commit();
-            number++;
             fragmentBag.add(radioFragment);
         }
 

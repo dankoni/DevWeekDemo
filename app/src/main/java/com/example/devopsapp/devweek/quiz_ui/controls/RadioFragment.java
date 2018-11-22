@@ -1,4 +1,4 @@
-package com.example.devopsapp.devweek.quiz_ui;
+package com.example.devopsapp.devweek.quiz_ui.controls;
 
 
 import android.os.Bundle;
@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.RadioButton;
 
 import com.example.devopsapp.devweek.R;
+import com.example.devopsapp.devweek.quiz_ui.RadioClicked;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -56,12 +57,7 @@ public class RadioFragment extends Fragment {
         mRadioButton = view.findViewById(R.id.radioButton);
         mRadioButton.setText(answerText);
 
-        mRadioButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                EventBus.getDefault().post(new RadioClicked(RadioFragment.this.getTag()));
-            }
-        });
+        mRadioButton.setOnClickListener(v -> EventBus.getDefault().post(new RadioClicked(RadioFragment.this.getTag())));
         return view;
     }
 

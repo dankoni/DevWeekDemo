@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".quiz_ui.MultipleFragment">
+    tools:context=".quiz_ui.controls.MultipleFragment">
 
     <LinearLayout
         android:id="@+id/answer_holder_set"
