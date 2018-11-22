@@ -3,6 +3,7 @@ package com.example.devopsapp.devweek.data;
 import android.app.Application;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
+import android.arch.persistence.db.SimpleSQLiteQuery;
 import android.os.AsyncTask;
 
 import com.example.devopsapp.devweek.data.network.Question;
@@ -36,6 +37,7 @@ public class QuizRepository {
 
     //LiveData observables
     private MutableLiveData<Question> questionLiveData;
+    private int id = 1;
 
 
     public QuizRepository(Application application) {
@@ -50,23 +52,56 @@ public class QuizRepository {
     }
 
     public void loadNextQuestion() {
-        getNewQuestionFromNetwork();
-
+        //getNewQuestionFromNetwork();
+        getNewQuestionFromDatabase();
     }
 
-    private void getNewQuestionFromNetwork() {
+    public void loadFirstQuestionsIntoDatabase() {
+        compositeDisposable.add(quizApi.getInitialQuestions()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(this::onInitalLoad, throwable -> onError()));
+    }
+
+   /* private void getNewQuestionFromNetwork() {
         compositeDisposable.add(quizApi.getNextQuestion()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe(this::onQuestionLoaded, throwable -> onError()));
+    }*/
+
+    private void getNewQuestionFromDatabase() {
+        questionDao.findAllQuestions().size();
+        questionLiveData.postValue(transform2Question(questionDao.getQuestionById(id)));
+        id++;
     }
+
+    private Question transform2Question(QuestionEntity questionEntity) {
+        Question question = new Question();
+        question.setResponseCode(1);
+        Result result = new Result();
+        result.setType(questionEntity.getType());
+        result.setCorrectAnswer(questionEntity.getCorrect_answer());
+        result.setIncorrectAnswers(questionEntity.getIncorrect_answers());
+        result.setQuestion(questionEntity.getQuestion());
+        ArrayList<Result> resultList = new ArrayList<Result>();
+        resultList.add(result);
+        question.setResults(resultList);
+
+        return question;
+    }
+
 
     private void onError() {
 
     }
 
-    private void onQuestionLoaded(Question question) {
-        new PopulateDbAsync(quizDatabase, question, questionLiveData).execute();
+   /* private void onQuestionLoaded(Question question) {
+        questionLiveData.postValue(question);
+    }*/
+
+    private void onInitalLoad(Question questions) {
+        new PopulateDbAsync(quizDatabase, questions).execute();
     }
 
 
@@ -80,19 +115,32 @@ public class QuizRepository {
 
         private final QuestionDao questionDao;
         private List<Result> questionSet;
-        private MutableLiveData<Question> questionLiveData;
+        private QuizDatabase quizDatabase;
 
-        PopulateDbAsync(QuizDatabase db, Question question, MutableLiveData<Question> liveData) {
+        PopulateDbAsync(QuizDatabase db, Question question) {
             questionSet = question.getResults();
             questionDao = db.getQuestionDao();
-            this.questionLiveData = liveData;
-
+            quizDatabase = db;
         }
 
 
         @Override
         protected Void doInBackground(final Void... params) {
-            // questionDao.deleteAll();
+
+            // reset all auto-incrementalValues
+            SimpleSQLiteQuery query = new SimpleSQLiteQuery("DELETE FROM sqlite_sequence");
+
+
+            quizDatabase.beginTransaction();
+            try {
+                quizDatabase.clearAllTables();
+                quizDatabase.query(query);
+                quizDatabase.setTransactionSuccessful();
+            } catch (Exception e) {
+
+            } finally {
+                quizDatabase.endTransaction();
+            }
 
             for (Result result : questionSet
                     ) {
@@ -103,23 +151,16 @@ public class QuizRepository {
             return null;
         }
 
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-            List<QuestionEntity> questionEntityList = questionDao.findAllQuestionsFromQuizForGivenId();
-            QuestionEntity questionEntity = questionEntityList.get(0);
-            Question question = new Question();
-            question.setResponseCode(1);
-            Result result = new Result();
-            result.setType(questionEntity.getType());
-            result.setCorrectAnswer(questionEntity.getCorrect_answer());
-            result.setIncorrectAnswers(questionEntity.getIncorrect_answers());
-            result.setQuestion(questionEntity.getQuestion());
-            ArrayList<Result> resultList = new ArrayList<Result>();
-            resultList.add(result);
-            question.setResults(resultList);
-            questionLiveData.postValue(question);
-        }
+
     }
+
+
+    private void clearAll() {
+
+        // (quizDatabase != null) ? : return false;
+
+
+    }
+
 
 }

@@ -6,5 +6,8 @@ import retrofit2.http.GET;
 public interface QuizApi {
 
     @GET("api.php?amount=10&category=18&difficulty=medium")
+    Single<Question> getInitialQuestions();
+
+    @GET("api.php?amount=1&category=18&difficulty=medium")
     Single<Question>  getNextQuestion();
 }

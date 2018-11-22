@@ -15,8 +15,8 @@ public class QuizViewModel extends AndroidViewModel {
     public QuizViewModel(Application application) {
         super(application);
         this.quizRepository = new QuizRepository(application);
+        quizRepository.loadFirstQuestionsIntoDatabase();
     }
-
 
     public void loadQuestion() {
         quizRepository.loadNextQuestion();

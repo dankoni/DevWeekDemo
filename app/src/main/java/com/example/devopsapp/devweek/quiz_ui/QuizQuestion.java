@@ -71,8 +71,8 @@ public class QuizQuestion extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mViewModel = ViewModelProviders.of(this).get(QuizViewModel.class);
-        mViewModel.loadQuestion();
         mViewModel.getQuestionLiveData().observe(this, this::onQuestionLoaded);
+        mViewModel.loadQuestion();
     }
 
     private void onQuestionLoaded(Question question) {
